@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiplayer Gaming Zone</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#101027,#20205a);
+    color: white;
+    text-align: center;
+    min-height: 100vh;
+}
+
+header {
+    padding: 25px;
+    background: #171738;
+    box-shadow: 0 3px 15px #000;
+}
+
+header h1 {
+    color: #00f7ff;
+    font-size: 30px;
+}
+
+header p {
+    margin-top: 8px;
+    color: #ccc;
+}
+
+.container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 15px;
+}
+
+.card {
+    background: #20204b;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 0 20px #00eaff33;
+}
+
+h2 {
+    color: #00f7ff;
+    margin-bottom: 20px;
+}
+
+.players {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.player {
+    background: #303064;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.score {
+    color: #00ffae;
+    font-size: 25px;
+    margin-top: 8px;
+}
+
+.status {
+    margin: 20px;
+    color: #ffe600;
+    font-size: 20px;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 330px;
+    margin: auto;
+}
+
+.cell {
+    height: 95px;
+    border: none;
+    border-radius: 12px;
+    background: #34346c;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.cell:hover {
+    background: #5050a0;
+}
+
+button {
+    border: none;
+    padding: 13px 20px;
+    border-radius: 10px;
+    background: #00d9ff;
+    color: #111;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 10px 5px;
+}
+
+button:hover {
+    background: #00ffae;
+}
+
+footer {
+    padding: 25px;
+    color: #aaa;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎮 MULTIPLAYER ZONE</h1>
+    <p>Play Games With Your Friends!</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>❌ Tic Tac Toe ⭕</h2>
+
+<div class="players">
+    <div class="player">
+        <h3>Player 1 ❌</h3>
+        <div class="score" id="scoreX">0</div>
+    </div>
+
+    <div class="player">
+        <h3>Player 2 ⭕</h3>
+        <div class="score" id="scoreO">0</div>
+    </div>
+</div>
+
+<div class="status" id="status">
+    Player 1 Turn (X)
+</div>
+
+<div class="board" id="board">
+    <button class="cell"></button>
+    <button class="cell"></button>
+    <button class="cell"></button>
+    <button class="cell"></button>
+    <button class="cell"></button>
+    <button class="cell"></button>
+    <button class="cell"></button>
+    <button class="cell"></button>
+    <button class="cell"></button>
+</div>
+
+<br>
+
+<button onclick="resetGame()">🔄 New Game</button>
+<button onclick="resetScores()">Reset Score</button>
+
+</div>
+</div>
+
+<footer>
+    © 2026 Multiplayer Gaming Zone
+    <p>Have Fun & Play Together!</p>
+</footer>
+
+<script>
+const cells = document.querySelectorAll(".cell");
+const statusText = document.getElementById("status");
+
+let currentPlayer = "X";
+let gameActive = true;
+let scoreX = 0;
+let scoreO = 0;
+
+const winPatterns = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6]
+];
+
+cells.forEach((cell) => {
+    cell.addEventListener("click", () => {
+
+        if (cell.textContent !== "" || !gameActive) return;
+
+        cell.textContent = currentPlayer;
+
+        if (checkWinner()) {
+            gameActive = false;
+
+            if (currentPlayer === "X") {
+                scoreX++;
+                document.getElementById("scoreX").textContent = scoreX;
+                statusText.textContent = "🎉 Player 1 Wins!";
+            } else {
+                scoreO++;
+                document.getElementById("scoreO").textContent = scoreO;
+                statusText.textContent = "🎉 Player 2 Wins!";
+            }
+            return;
+        }
+
+        if ([...cells].every(c => c.textContent !== "")) {
+            gameActive = false;
+            statusText.textContent = "🤝 Match Draw!";
+            return;
+        }
+
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+
+        statusText.textContent =
+            currentPlayer === "X"
+            ? "Player 1 Turn (X)"
+            : "Player 2 Turn (O)";
+    });
+});
+
+function checkWinner() {
+    return winPatterns.some(pattern =>
+        pattern.every(index =>
+            cells[index].textContent === currentPlayer
+        )
+    );
+}
+
+function resetGame() {
+    cells.forEach(cell => cell.textContent = "");
+    currentPlayer = "X";
+    gameActive = true;
+    statusText.textContent = "Player 1 Turn (X)";
+}
+
+function resetScores() {
+    scoreX = 0;
+    scoreO = 0;
+
+    document.getElementById("scoreX").textContent = 0;
+    document.getElementById("scoreO").textContent = 0;
+
+    resetGame();
+}
+</script>
+
+</body>
+</html>
