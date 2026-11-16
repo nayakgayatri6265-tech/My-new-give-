@@ -4,262 +4,237 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Multiplayer Gaming Zone</title>
-
+<title>Multiplayer Arena</title>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090d20;color:white;
+ font-family:Arial;text-align:center;
 }
-
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#101027,#20205a);
-    color: white;
-    text-align: center;
-    min-height: 100vh;
+header{padding:18px;background:#151d3b}
+h1{color:#48e5ff;margin:5px}
+.subtitle{color:#aaa}
+.game{
+ max-width:750px;margin:20px auto;padding:15px;
 }
-
-header {
-    padding: 25px;
-    background: #171738;
-    box-shadow: 0 3px 15px #000;
+.score{
+ display:flex;justify-content:space-around;
+ font-size:20px;margin:15px;
 }
-
-header h1 {
-    color: #00f7ff;
-    font-size: 30px;
+.p1{color:#42eaff}
+.p2{color:#ff65b8}
+canvas{
+ width:100%;background:#101a32;
+ border:3px solid #48e5ff;border-radius:15px;
+ touch-action:none;
 }
-
-header p {
-    margin-top: 8px;
-    color: #ccc;
+button{
+ background:#263b67;color:white;
+ border:0;border-radius:10px;
+ padding:12px 18px;margin:5px;
+ font-size:16px;cursor:pointer;
 }
-
-.container {
-    max-width: 600px;
-    margin: 30px auto;
-    padding: 15px;
+button:active{background:#08a9c5}
+.controls{
+ display:flex;justify-content:space-around;
+ gap:15px;margin-top:15px;
 }
-
-.card {
-    background: #20204b;
-    padding: 25px;
-    border-radius: 18px;
-    box-shadow: 0 0 20px #00eaff33;
-}
-
-h2 {
-    color: #00f7ff;
-    margin-bottom: 20px;
-}
-
-.players {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.player {
-    background: #303064;
-    padding: 15px;
-    border-radius: 12px;
-}
-
-.score {
-    color: #00ffae;
-    font-size: 25px;
-    margin-top: 8px;
-}
-
-.status {
-    margin: 20px;
-    color: #ffe600;
-    font-size: 20px;
-}
-
-.board {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    max-width: 330px;
-    margin: auto;
-}
-
-.cell {
-    height: 95px;
-    border: none;
-    border-radius: 12px;
-    background: #34346c;
-    color: white;
-    font-size: 40px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.cell:hover {
-    background: #5050a0;
-}
-
-button {
-    border: none;
-    padding: 13px 20px;
-    border-radius: 10px;
-    background: #00d9ff;
-    color: #111;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 10px 5px;
-}
-
-button:hover {
-    background: #00ffae;
-}
-
-footer {
-    padding: 25px;
-    color: #aaa;
-}
+.pad{display:grid;grid-template-columns:repeat(3,45px);gap:5px}
+.pad button{padding:12px 5px;margin:0}
+.info{color:#bbb;font-size:14px;line-height:1.8}
 </style>
 </head>
-
 <body>
 
 <header>
-    <h1>🎮 MULTIPLAYER ZONE</h1>
-    <p>Play Games With Your Friends!</p>
+<h1>🎮 MULTIPLAYER ARENA</h1>
+<div class="subtitle">Two Players • One Arena</div>
 </header>
 
-<div class="container">
-
-<div class="card">
-
-<h2>❌ Tic Tac Toe ⭕</h2>
-
-<div class="players">
-    <div class="player">
-        <h3>Player 1 ❌</h3>
-        <div class="score" id="scoreX">0</div>
-    </div>
-
-    <div class="player">
-        <h3>Player 2 ⭕</h3>
-        <div class="score" id="scoreO">0</div>
-    </div>
+<div class="game">
+<div class="score">
+<div class="p1">🔵 Player 1: <b id="s1">0</b></div>
+<div class="p2">🔴 Player 2: <b id="s2">0</b></div>
 </div>
 
-<div class="status" id="status">
-    Player 1 Turn (X)
+<h3 id="status">Collect the yellow star! ⭐</h3>
+<canvas id="game" width="700" height="400"></canvas>
+
+<div>
+<button onclick="startGame()">▶ Start Game</button>
+<button onclick="resetGame()">🔄 Restart</button>
 </div>
 
-<div class="board" id="board">
-    <button class="cell"></button>
-    <button class="cell"></button>
-    <button class="cell"></button>
-    <button class="cell"></button>
-    <button class="cell"></button>
-    <button class="cell"></button>
-    <button class="cell"></button>
-    <button class="cell"></button>
-    <button class="cell"></button>
-</div>
-
-<br>
-
-<button onclick="resetGame()">🔄 New Game</button>
-<button onclick="resetScores()">Reset Score</button>
-
+<div class="controls">
+<div>
+<h3 class="p1">Player 1</h3>
+<div class="pad">
+<button data-key="w">⬆</button>
+<button disabled> </button>
+<button disabled> </button>
+<button data-key="a">⬅</button>
+<button data-key="s">⬇</button>
+<button data-key="d">➡</button>
 </div>
 </div>
 
-<footer>
-    © 2026 Multiplayer Gaming Zone
-    <p>Have Fun & Play Together!</p>
-</footer>
+<div>
+<h3 class="p2">Player 2</h3>
+<div class="pad">
+<button data-key="ArrowUp">⬆</button>
+<button disabled> </button>
+<button disabled> </button>
+<button data-key="ArrowLeft">⬅</button>
+<button data-key="ArrowDown">⬇</button>
+<button data-key="ArrowRight">➡</button>
+</div>
+</div>
+</div>
+
+<p class="info">
+Player 1: W A S D keys<br>
+Player 2: Arrow keys<br>
+Collect stars to increase your score.<br>
+First player to 10 points wins!
+</p>
+</div>
 
 <script>
-const cells = document.querySelectorAll(".cell");
-const statusText = document.getElementById("status");
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
 
-let currentPlayer = "X";
-let gameActive = true;
-let scoreX = 0;
-let scoreO = 0;
+let p1,p2,star,score1,score2,running;
+let keys={};
 
-const winPatterns = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,3,6],
-    [1,4,7],
-    [2,5,8],
-    [0,4,8],
-    [2,4,6]
-];
+function resetGame(){
+ p1={x:100,y:180,color:"#42eaff"};
+ p2={x:580,y:180,color:"#ff65b8"};
+ score1=0;score2=0;
+ running=false;
+ keys={};
+ updateScore();
+ makeStar();
+ draw();
+ document.getElementById("status").textContent=
+ "Press Start Game to play!";
+}
 
-cells.forEach((cell) => {
-    cell.addEventListener("click", () => {
+function makeStar(){
+ star={
+ x:40+Math.random()*620,
+ y:40+Math.random()*320
+ };
+}
 
-        if (cell.textContent !== "" || !gameActive) return;
+function updateScore(){
+ document.getElementById("s1").textContent=score1;
+ document.getElementById("s2").textContent=score2;
+}
 
-        cell.textContent = currentPlayer;
+function startGame(){
+ if(score1>=10||score2>=10)resetGame();
+ running=true;
+ document.getElementById("status").textContent="Game Started! ⭐";
+}
 
-        if (checkWinner()) {
-            gameActive = false;
+function draw(){
+ ctx.clearRect(0,0,700,400);
 
-            if (currentPlayer === "X") {
-                scoreX++;
-                document.getElementById("scoreX").textContent = scoreX;
-                statusText.textContent = "🎉 Player 1 Wins!";
-            } else {
-                scoreO++;
-                document.getElementById("scoreO").textContent = scoreO;
-                statusText.textContent = "🎉 Player 2 Wins!";
-            }
-            return;
-        }
+ // Arena grid
+ ctx.strokeStyle="#1c3150";
+ for(let x=0;x<700;x+=35){
+  ctx.beginPath();ctx.moveTo(x,0);
+  ctx.lineTo(x,400);ctx.stroke();
+ }
+ for(let y=0;y<400;y+=35){
+  ctx.beginPath();ctx.moveTo(0,y);
+  ctx.lineTo(700,y);ctx.stroke();
+ }
 
-        if ([...cells].every(c => c.textContent !== "")) {
-            gameActive = false;
-            statusText.textContent = "🤝 Match Draw!";
-            return;
-        }
+ // Star
+ ctx.font="32px Arial";
+ ctx.fillText("⭐",star.x-15,star.y+10);
 
-        currentPlayer = currentPlayer === "X" ? "O" : "X";
+ // Players
+ [p1,p2].forEach((p,i)=>{
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,19,0,Math.PI*2);
+  ctx.fillStyle=p.color;
+  ctx.shadowColor=p.color;
+  ctx.shadowBlur=20;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.fillStyle="white";
+  ctx.font="12px Arial";
+  ctx.textAlign="center";
+  ctx.fillText("P"+(i+1),p.x,p.y+4);
+ });
+ ctx.textAlign="left";
+}
 
-        statusText.textContent =
-            currentPlayer === "X"
-            ? "Player 1 Turn (X)"
-            : "Player 2 Turn (O)";
-    });
+function movePlayer(p,up,down,left,right){
+ if(keys[up])p.y-=4;
+ if(keys[down])p.y+=4;
+ if(keys[left])p.x-=4;
+ if(keys[right])p.x+=4;
+
+ p.x=Math.max(20,Math.min(680,p.x));
+ p.y=Math.max(20,Math.min(380,p.y));
+}
+
+function checkStar(p,player){
+ let dx=p.x-star.x;
+ let dy=p.y-star.y;
+
+ if(Math.sqrt(dx*dx+dy*dy)<35){
+  if(player===1)score1++;
+  else score2++;
+
+  updateScore();
+  makeStar();
+
+  if(score1>=10||score2>=10){
+   running=false;
+   document.getElementById("status").textContent=
+    score1>=10?"🏆 Player 1 Wins!":"🏆 Player 2 Wins!";
+  }
+ }
+}
+
+function loop(){
+ if(running){
+  movePlayer(p1,"w","s","a","d");
+  movePlayer(p2,"ArrowUp","ArrowDown",
+   "ArrowLeft","ArrowRight");
+  checkStar(p1,1);
+  checkStar(p2,2);
+ }
+ draw();
+ requestAnimationFrame(loop);
+}
+
+window.addEventListener("keydown",e=>{
+ if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key))
+  e.preventDefault();
+ keys[e.key.length===1?e.key.toLowerCase():e.key]=true;
 });
 
-function checkWinner() {
-    return winPatterns.some(pattern =>
-        pattern.every(index =>
-            cells[index].textContent === currentPlayer
-        )
-    );
-}
+window.addEventListener("keyup",e=>{
+ keys[e.key.length===1?e.key.toLowerCase():e.key]=false;
+});
 
-function resetGame() {
-    cells.forEach(cell => cell.textContent = "");
-    currentPlayer = "X";
-    gameActive = true;
-    statusText.textContent = "Player 1 Turn (X)";
-}
+document.querySelectorAll("[data-key]").forEach(btn=>{
+ let k=btn.dataset.key;
+ btn.addEventListener("pointerdown",e=>{
+  e.preventDefault();keys[k]=true;
+ });
+ ["pointerup","pointerleave","pointercancel"].forEach(event=>{
+  btn.addEventListener(event,()=>keys[k]=false);
+ });
+});
 
-function resetScores() {
-    scoreX = 0;
-    scoreO = 0;
-
-    document.getElementById("scoreX").textContent = 0;
-    document.getElementById("scoreO").textContent = 0;
-
-    resetGame();
-}
+resetGame();
+loop();
 </script>
-
 </body>
 </html>
